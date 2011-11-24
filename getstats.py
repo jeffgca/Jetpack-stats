@@ -6,7 +6,14 @@ from re import findall
 
 from date_hack import get_stats_week
 
-from jinja2 import Template
+try:
+    # maybe you don't have Jinja2?
+    from jinja2 import Template
+except:
+    print "In order for this script to function, you need to install Jinja2 from pip"
+    import sys
+    sys.exit(0)
+    
 
 class FormatStats(object):
     
