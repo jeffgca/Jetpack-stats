@@ -25,5 +25,5 @@ __Sample output:__
     Formatting data...
     Done!
     
-The script outputs an html file called 'output-YYYY-MM-DD.html' in the current
-folder containing an html fragment suitable for posting to the AMO blog.
+_The script outputs an html file called 'output-YYYY-MM-DD.html' in the current
+folder containing an html fragment suitable for posting to the AMO blog._
