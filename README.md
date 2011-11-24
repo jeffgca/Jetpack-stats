@@ -8,13 +8,13 @@ __Requirements:__
 * python, simplejson
 * jinja2 ( `pip install Jinja2` )
 
-To use:
+__To use:__
 
     git clone git://github.com/canuckistani/Jetpack-stats.git
     cd Jetpack-stats
     python getstats.py
 
-Sample output:
+__Sample output:__
 
     Generating weekly stats...
     Fetching fixed bugs...
