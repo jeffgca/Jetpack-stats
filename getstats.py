@@ -124,5 +124,5 @@ if __name__ == '__main__':
     print "Generating weekly stats..."
     gs = GetStats()
     html = gs.generate()
-    open("./output-%s.html" % strftime('%Y-%m-%d'), 'w').write(html).close()
+    open("./output-%s.html" % strftime('%Y-%m-%d'), 'w').write(html)
     
