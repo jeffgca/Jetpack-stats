@@ -29,6 +29,7 @@ class FormatStats(object):
 </ul>
 
 <em style="font-size: 85%;">Note: the stats above are based on the queries I linked to for each item. If you have suggestions on how these queries might be made more accurate,please comment below. Stats generated at {{ run_time }}</em>
+
 """
         self.template = Template(raw_tpl)
 
