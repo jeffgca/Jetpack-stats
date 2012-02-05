@@ -43,7 +43,7 @@ class GetStats(object):
         lt = localtime()
         today = date(lt[0], lt[1], lt[2])
         self.range = get_stats_week(str(today))
-        self.firefox_version = '8.0.1'
+        self.firefox_version = '10.0'
 
     def get_fixed(self):
         """ get the number of fixed bugs for the previous whole week """
@@ -68,7 +68,8 @@ class GetStats(object):
         
     def get_addons_number(self):
         """scrape the AMO site for the number of current jetpack addons """
-        url = "https://addons.mozilla.org/en-US/firefox/tag/jetpack?appver=8.0"
+        url = "https://addons.mozilla.org/en-US/firefox/tag/jetpack?appver=%s" % self.firefox_version
+        print url
         raw = urlopen(url).read()
         matches = findall('Showing [\S\s]+?of <b>([\d]+?)</b>', raw)
         return matches.pop()
@@ -126,4 +127,6 @@ if __name__ == '__main__':
     gs = GetStats()
     html = gs.generate()
     open("./output-%s.html" % strftime('%Y-%m-%d'), 'w').write(html)
+
+
     
