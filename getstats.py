@@ -3,6 +3,8 @@ from time import localtime, strptime, strftime, time
 from datetime import date, datetime, timedelta
 from simplejson import loads, dumps
 from re import findall
+from os.path import exists
+from os import mkdir
 
 from date_hack import get_stats_week
 
@@ -13,24 +15,44 @@ except:
     print "In order for this script to function, you need to install Jinja2 from pip"
     import sys
     sys.exit(0)
+
+def get_stats_week(date_string):
     
+    class ReturnRange(object):
+        
+        def __init__(self, start, end):
+            self.start = start
+            self.end = end
+        
+        def __str__(self):
+            return dumps({'start': start.isoformat(), 'end': end.isoformat()})
+            
+    
+    today = strptime(date_string, '%Y-%m-%d')
+    date_today = date(today[0], today[1], today[2])
+    # Tuesday is 1
+    day_of_week = date_today.weekday()
+    #print "day of week is: %s" % day_of_week
+    if day_of_week == 1:
+        # date range is previous monday until today
+        start = date_today - timedelta(days=8)
+        end = date_today
+    elif day_of_week == 0:
+        # date range is from two weeks ago until previous tuesday
+        start = date_today - timedelta(days=14)
+        end = date_today - timedelta(days=6)
+    else:
+        # date range is from monday-before-last until previous tuesday
+        diff = day_of_week - 1
+        end = date_today - timedelta(days=diff)
+        start = end - timedelta(days=8)
+    return ReturnRange(start, end)
+
 
 class FormatStats(object):
     
     def __init__(self):
-        raw_tpl = """
-<h3>Quick Stats</h3>
-<ul>
-    <li>Total <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&product=Add-on%20SDK&known_name=Jetpack-Open" target="_blank">open bugs</a>: {{ open }}</li>
-    <li>Bugs <a href="https://bugzilla.mozilla.org/buglist.cgi?chfieldto={{ range_to }}&chfield=[Bug%20creation]&chfieldfrom={{ range_from }}&product=Add-on%20SDK" target="_blank">created last week</a>: {{ new }}</li>
-    <li>Bugs <a href="https://bugzilla.mozilla.org/buglist.cgi?chfieldto={{ range_to }}&chfield=resolution&chfieldfrom={{ range_from }}&chfieldvalue=FIXED&product=Add-on%20SDK" target="_blank">fixed last week</a>: {{ fixed }}</li>
-    <li>Total SDK-based Addons <a href="https://addons.mozilla.org/en-US/firefox/tag/jetpack?appver={{ fx_version }}" target="_blank">on AMO</a>: {{ total_jetpacks }}</li>
-    <li>Open <a href="https://github.com/mozilla/addon-sdk/pulls" target="_blank">pull requests</a> on Github: {{ pull_requests }}</li>
-</ul>
-
-<em style="font-size: 85%;">Note: the stats above are based on the queries I linked to for each item. If you have suggestions on how these queries might be made more accurate,please comment below. Stats generated at {{ run_time }}</em>
-
-"""
+        raw_tpl = open("./weekly.tpl.html", 'r').read()
         self.template = Template(raw_tpl)
 
     def format(self, data):
@@ -43,7 +65,9 @@ class GetStats(object):
         lt = localtime()
         today = date(lt[0], lt[1], lt[2])
         self.range = get_stats_week(str(today))
-        self.firefox_version = '10.0'
+        self.firefox_version = '11.0'
+        self.link_date = "%s-%s-%s" % ( lt[0], lt[1], lt[2] )
+        self.title_date = "Jetpack Project: weekly update for " + strftime("%B %d, %Y")
 
     def get_fixed(self):
         """ get the number of fixed bugs for the previous whole week """
@@ -90,7 +114,7 @@ class GetStats(object):
         n = Request(url, None, headers)
         result = urlopen(n).read()
         return loads(result)
-        
+
     def generate(self):
         print "Fetching fixed bugs..."
         fixed = self.get_fixed()
@@ -104,6 +128,7 @@ class GetStats(object):
         pull_requests = self.get_pull_requests()
         
         run_time = strftime('%Y-%m-%d %H:%M:%S %Z')
+
         
         print "Formatting data..."
         data = {
@@ -115,7 +140,9 @@ class GetStats(object):
             'range_from': self.range.start.isoformat(),
             'range_to': self.range.end.isoformat(),
             'fx_version': self.firefox_version,
-            'run_time': run_time
+            'run_time': run_time,
+            'link_date': self.link_date, 
+            'title_date': self.title_date
         }
         
         fmt = FormatStats()
@@ -126,7 +153,11 @@ if __name__ == '__main__':
     print "Generating weekly stats..."
     gs = GetStats()
     html = gs.generate()
-    open("./output-%s.html" % strftime('%Y-%m-%d'), 'w').write(html)
+    if not exists('./output'):
+        mkdir('./output')
+    open("./output/output-%s.html" % strftime('%Y-%m-%d'), 'w').write(html)
+
+    print "\nOutput:", html
 
 
     
