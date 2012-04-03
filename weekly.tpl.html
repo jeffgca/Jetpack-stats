@@ -1,0 +1,29 @@
+title:
+{{ title_date }}
+
+html:
+<h3>Project News</h3>
+
+<ul>
+	<li></li>
+</ul>
+
+<h3>Quick Stats</h3>
+<ul>
+    <li>Total <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&product=Add-on%20SDK&known_name=Jetpack-Open" target="_blank">open bugs</a>: {{ open }}</li>
+    <li>Bugs <a href="https://bugzilla.mozilla.org/buglist.cgi?chfieldto={{ range_to }}&chfield=[Bug%20creation]&chfieldfrom={{ range_from }}&product=Add-on%20SDK" target="_blank">created last week</a>: {{ new }}</li>
+    <li>Bugs <a href="https://bugzilla.mozilla.org/buglist.cgi?chfieldto={{ range_to }}&chfield=resolution&chfieldfrom={{ range_from }}&chfieldvalue=FIXED&product=Add-on%20SDK" target="_blank">fixed last week</a>: {{ fixed }}</li>
+    <li>Total SDK-based Addons <a href="https://addons.mozilla.org/en-US/firefox/tag/jetpack?appver={{ fx_version }}" target="_blank">on AMO</a>: {{ total_jetpacks }}</li>
+    <li>Open <a href="https://github.com/mozilla/addon-sdk/pulls" target="_blank">pull requests</a> on Github: {{ pull_requests }}</li>
+</ul>
+
+<em style="font-size: 85%;">Note: the stats above are based on the queries I linked to for each item. If you have suggestions on how these queries might be made more accurate,please comment below. Stats generated at {{ run_time }}</em>
+
+<h3>Meeting Brief</h3>
+
+<ul>
+	<li></li>
+</ul>
+
+Full minutes are available here:
+<a href="https://wiki.mozilla.org/Jetpack/Weekly_Meeting/{{ link_date }}#Minutes" target="_blank">https://wiki.mozilla.org/Jetpack/Weekly_Meeting/{{ link_date }}#Minutes</a>
