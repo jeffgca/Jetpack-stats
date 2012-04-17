@@ -6,8 +6,6 @@ from re import findall
 from os.path import exists
 from os import mkdir
 
-from date_hack import get_stats_week
-
 try:
     # maybe you don't have Jinja2?
     from jinja2 import Template
