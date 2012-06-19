@@ -14,7 +14,7 @@ except:
     import sys
     sys.exit(0)
 
-def get_stats_week(date_string):
+def get_stats_week(today):
     
     class ReturnRange(object):
         
@@ -24,9 +24,7 @@ def get_stats_week(date_string):
         
         def __str__(self):
             return dumps({'start': start.isoformat(), 'end': end.isoformat()})
-            
-    
-    today = strptime(date_string, '%Y-%m-%d')
+
     date_today = date(today[0], today[1], today[2])
     # Tuesday is 1
     day_of_week = date_today.weekday()
@@ -60,11 +58,9 @@ class GetStats(object):
 
     def __init__(self):
         self.bugzilla_url = 'https://api-dev.bugzilla.mozilla.org/latest/bug?product=Add-on%20SDK'
-        lt = localtime()
-        today = date(lt[0], lt[1], lt[2])
-        self.range = get_stats_week(str(today))
-        self.firefox_version = '11.0'
-        self.link_date = "%s-%s-%s" % ( lt[0], lt[1], lt[2] )
+        self.range = get_stats_week(localtime())
+        self.firefox_version = '13.0'
+        self.link_date = strftime("%Y-%m-%d")
         self.title_date = "Jetpack Project: weekly update for " + strftime("%B %d, %Y")
 
     def get_fixed(self):
