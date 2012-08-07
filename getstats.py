@@ -1,7 +1,7 @@
 from urllib2 import Request, urlopen
 from time import localtime, strptime, strftime, time
 from datetime import date, datetime, timedelta
-from simplejson import loads, dumps
+from json import loads, dumps
 from re import findall
 from os.path import exists
 from os import mkdir
@@ -59,7 +59,7 @@ class GetStats(object):
     def __init__(self):
         self.bugzilla_url = 'https://api-dev.bugzilla.mozilla.org/latest/bug?product=Add-on%20SDK'
         self.range = get_stats_week(localtime())
-        self.firefox_version = '13.0'
+        self.firefox_version = '14.0'
         self.link_date = strftime("%Y-%m-%d")
         self.title_date = "Jetpack Project: weekly update for " + strftime("%B %d, %Y")
 
