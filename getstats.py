@@ -59,7 +59,7 @@ class GetStats(object):
     def __init__(self):
         self.bugzilla_url = 'https://api-dev.bugzilla.mozilla.org/latest/bug?product=Add-on%20SDK'
         self.range = get_stats_week(localtime())
-        self.firefox_version = '14.0'
+        self.firefox_version = '16.0.1'
         self.link_date = strftime("%Y-%m-%d")
         self.title_date = "Jetpack Project: weekly update for " + strftime("%B %d, %Y")
 
@@ -89,7 +89,7 @@ class GetStats(object):
         url = "https://addons.mozilla.org/en-US/firefox/tag/jetpack?appver=%s" % self.firefox_version
         print url
         raw = urlopen(url).read()
-        matches = findall('Showing [\S\s]+?of <b>([\d]+?)</b>', raw)
+        matches = findall('Showing [\S\s]+?of <b>([\d\,]+?)</b>', raw)
         return matches.pop()
         
     def get_pull_requests(self):
